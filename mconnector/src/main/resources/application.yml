@@ -1,0 +1,16 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  application:
+    name: mconnector
+server:
+  port: 8082
+mastodon:
+  access_token: token_placeholder
+  ulr: https://mastodon.social
+logging:
+  level:
+    org.test.mastodon.mconnector: TRACE

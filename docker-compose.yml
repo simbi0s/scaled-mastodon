@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mconnector:
+    image: mconnector:latest
+    container_name: mconnector
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - MASTODON_ACCESS_TOKEN=!MASTODON_TOKEN_PLACEHOLDER!
+    depends_on:
+      - rabbitmq
+    networks:
+      - mconnector_network
+
+  post-gateway:
+    image: post-gateway:latest
+    container_name: post-gateway
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq
+    networks:
+      - mconnector_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - mconnector_network
+
+networks:
+  mconnector_network:
+    driver: bridge
